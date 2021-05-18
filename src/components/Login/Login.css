@@ -1,0 +1,118 @@
+.login {
+    background-color: #202020;
+}
+
+.login__title {
+    color: white;
+    width: 396px;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 auto 40px;
+}
+
+.login__form {
+    width: 396px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.login__data {
+    background-color: #2F2F2F;
+    height: 46px;
+    border-radius: 8px;
+    border: none;
+    margin-bottom: 20px;
+    color: white;
+    padding-left: 15px;
+    font-size: 13px;
+    font-weight: 400;
+}
+
+.login__data-name {
+    color: #8B8B8B;
+    font-size: 10px;
+    margin: 0 auto 10px;
+    padding: 0;
+    width: 396px;
+    text-align: start;
+}
+
+.login__submit {
+    margin: 69px auto 16px;
+    color: white;
+    background-color: #4285F4;
+    border-radius: 3px;
+    border: none;
+    height: 45px;
+    width: 396px;
+}
+
+.login__register {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
+    padding-bottom: 70px;
+}
+
+.login__register-title {
+    color: #8B8B8B;
+    margin: 0;
+}
+
+.login__register-link {
+    color: #4285F4;
+    text-decoration: none;
+}
+
+.login__register-link:hover {
+    color: white;
+}
+
+.login__data:focus {
+    border: solid 1px #4285F4;
+    outline: none;
+}
+
+@media screen and (max-width: 1150px) {
+    .login__register {
+        padding-bottom: 232px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .login__register {
+        width: 260px;
+        gap: 7px;
+        margin: auto;
+        padding-bottom: 30px;
+    }
+
+    .login__submit {
+        width: 260px;
+        margin: 247px auto 14px;
+    }
+
+    .login__title {
+        width: 260px;
+        margin: 0 auto 80px;
+        text-align: center;
+    }
+
+    .login__data-name {
+        width: 260px;
+    }
+    
+    .login__form {
+        width: 260px;
+    }
+
+    .login__register-title {
+        font-size: 12px;
+    }
+    
+    .login__register-link {
+        font-size: 12px;
+    }
+}

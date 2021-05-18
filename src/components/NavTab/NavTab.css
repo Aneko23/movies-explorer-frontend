@@ -1,0 +1,33 @@
+.navtab-menu {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    justify-content: center;
+    background-color: #272727;
+    height: 66px;
+    margin: 0;
+    list-style: none;
+    padding: 0;
+    font-size: 13px;
+}
+
+.navtab-menu__item {
+    color: white;
+    border: none;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+.navtab-menu__link {
+    color: white;
+}
+
+.navtab-menu__link:hover {
+    color: #D3D3D3;
+}
+
+@media screen and (max-width: 767px) {
+    .navtab-menu {
+        gap: 24px;
+    }
+}

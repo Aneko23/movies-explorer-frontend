@@ -1,0 +1,21 @@
+.movies {
+background-color: #202020;
+}
+
+.movies__break-line {
+    width: 1140px;
+    border: solid 1px #424242;
+    margin: 30px auto 10px;
+}
+
+@media screen and (max-width: 1150px) {
+    .movies__break-line {
+        width: 708px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .movies__break-line {
+        width: 292px;
+    }
+}

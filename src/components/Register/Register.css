@@ -1,0 +1,111 @@
+.register {
+    background-color: #202020;
+}
+
+.register__title {
+    color: white;
+    width: 396px;
+    font-size: 24px;
+    font-weight: 400;
+    margin: 0 auto 40px;
+}
+
+.register__form {
+    width: 396px;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+}
+
+.register__data {
+    background-color: #2F2F2F;
+    height: 46px;
+    border-radius: 8px;
+    border: none;
+    padding-left: 15px;
+    font-size: 13px;
+    margin-bottom: 20px;
+    font-weight: 400;
+    color: white
+}
+
+.register__data-name {
+    color: #8B8B8B;
+    font-size: 10px;
+    font-weight: 400;
+    margin: 0 auto 10px;
+    padding: 0;
+    width: 396px;
+    text-align: start;
+}
+
+.register__submit {
+    margin: 69px auto 16px;
+    color: white;
+    background-color: #4285F4;
+    border-radius: 3px;
+    border: none;
+    height: 45px;
+    width: 396px;
+}
+
+.register__signin {
+    display: flex;
+    flex-direction: row;
+    gap: 6px;
+    justify-content: center;
+    padding-bottom: 70px;
+}
+
+.register__login-title {
+    color: #8B8B8B;
+    margin: 0;
+}
+
+.register__login-link {
+    color: #4285F4;
+    text-decoration: none;
+}
+
+.register__data:focus {
+    border: solid 1px #4285F4;
+    outline: none;
+}
+
+@media screen and (max-width: 1150px) {
+    .register__signin {
+        padding-bottom: 232px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .register__title {
+        width: 260px;
+        text-align: center;
+        margin: 0 auto 80px;
+    }
+    
+    .register__form {
+        width: 260px;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+    }
+    
+    .register__data-name {
+        margin: 0 auto 10px;
+        padding: 0;
+        width: 260px;
+    }
+    
+    .register__submit {
+        margin: 157px auto 14px;
+        width: 260px;
+    }
+    
+    .register__signin {
+        gap: 7px;
+        padding-bottom: 30px;
+        margin: 0;
+    }
+}

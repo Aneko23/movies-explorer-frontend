@@ -1,0 +1,126 @@
+.about-me {
+    background-color: #202020;
+}
+
+.about-me__info {
+    width: 600px;
+}
+
+.about-me__container {
+    color: white;
+    margin-top: 66px;
+    display: flex;
+    flex-direction: row;
+    width: 1140px;
+    margin: auto;
+    justify-content: space-between;
+    gap: 270px;
+}
+
+.about-me__name {
+    font-size: 50px;
+    line-height: 58px;
+    margin: 0 auto 18px;
+    font-weight: 400;
+}
+
+.about-me__job {
+    font-size: 18px;
+    line-height: 20px;
+    margin: 0 auto 26px;
+    font-weight: 400;
+}
+
+.about-me__history {
+    font-size: 14px;
+    line-height: 22px;
+    margin: 0 auto 99px;
+    font-weight: 400;
+}
+
+.about-me__photo {
+    object-fit: cover;
+    border-radius: 10px;
+    height: 327px;
+    width: 270px;
+}
+
+.about-me__network {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.about-me__link {
+    background-color: transparent;
+    border: none;
+    font-size: 14px;
+    color: white;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+.about-me__link:hover {
+    color: #D3D3D3;
+}
+
+@media screen and (max-width: 1150px) {
+
+    .about-me__container {
+        width: 668px;
+        gap: 49px;
+    }
+
+    .about-me__photo {
+        width: 255px;
+        height: 307px;
+    }
+
+    .about-me__info {
+        width: 364px;
+    }
+    
+}
+
+@media screen and (max-width: 767px) {
+
+    .about-me__container {
+        flex-direction: column-reverse;
+        width: 320px;
+        gap: 40px;
+    }
+
+    .about-me__photo {
+        width: 292px;
+        height: 352px;
+        margin: auto;
+    }
+
+    .about-me__info {
+        width: 292px;
+        margin: auto;
+    }
+
+    .about-me__name {
+        font-size: 30px;
+        line-height: 36px;
+        margin: 0 auto 20px;
+    }
+
+    .about-me__job {
+        font-size: 11px;
+        line-height: 16px;
+        margin: 0 auto 20px;
+    }
+    
+    .about-me__history {
+        font-size: 11px;
+        line-height: 16px;
+        margin: 0 auto 40px;
+    }
+
+    .about-me__network {
+        gap: 26px;
+    }
+    
+}
