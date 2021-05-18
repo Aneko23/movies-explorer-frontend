@@ -1,0 +1,112 @@
+.search {
+    background-color: #202020;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding-top: 80px;
+    padding-bottom: 29px;
+}
+
+.search-form__input {
+    width: 1066px;
+    height: 50px;
+    background-color: #2F2F2F;
+    border: none;
+    border-radius: 8px;
+    padding-left: 20px;
+    color: white;
+}
+
+.search-form__input:focus {
+    border: solid 1px #4285F4;
+    outline: none;
+}
+
+.search-form__button {
+    width: 44px;
+    height: 44px;
+    background-image: url('../../images/search-button.svg');
+    border: none;
+    border-radius: 5px;
+    padding: 0;
+    cursor: pointer;
+}
+
+/* Чекбокс под строкой поиска */
+
+.search__checkbox {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+    gap: 12px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.search__ellipse {
+    display: flex;
+    transition: background-color 0.5s;
+    width: 36px;
+    height: 20px;
+    border-radius: 20px;
+}
+
+.search__circle {
+    background-color: white;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    margin: 2px;
+    cursor: pointer;
+    transition: transform 0.5s;
+}
+
+.search__name {
+    font-size: 12px;
+    line-height: 18px;
+    color: white;
+    margin: 0;
+}
+
+.search__ellipse_active {
+    background-color: #3DDC84;
+}
+
+.search__ellipse_inactive {
+    background-color: #2F2F2F;
+}
+
+.search__circle_active {
+    transform: translateX(100%);
+}
+
+.search__circle_inactive {
+    transform: translateX(0%);
+}
+
+@media screen and (max-width: 1150px) {
+    .search-form__input {
+        width: 654px;
+    }
+
+    .search-form {
+        padding-bottom: 40px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .search-form__input {
+        width: 238px;
+        padding-left: 13px;
+    }
+
+    .search-form {
+        padding-bottom: 40px;
+
+    }
+}
