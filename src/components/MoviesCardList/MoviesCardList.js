@@ -1,40 +1,51 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
 export default function MoviesCardList (props) {
 
+    function openMore() {
+        props.openMoreSavedMovies();
+    }
+
+    function openMoreMovies() {
+        props.openMoreMovies();
+    }
+
     return (
         <div className="movies-list">
-        <Route path="/movies">
+            <Switch>
+        <Route exact path="/movies">
         <ul className="movies-list__element">
-            {props.movies.map(movie => 
-                <MoviesCard 
+            {props.movies.map(movie =>
+                <MoviesCard
                 key={movie._id}
                 movie={movie}
-                nameRu={movie.nameRu} 
-                time={movie.time} 
-                image={movie.image}
-                saveMovie={props.saveMovie}
+                filterMovies={props.filterMovies}
+                handleAddSavedMovie={props.handleAddSavedMovie}
+                isSaved={props.isSaved}
+                savedMovies={props.savedMovies}
                 />
             )}
         </ul>
+        <p className={props.isNotFound ? "movies-list__not-found" : "movies-list__not-found_unactive"}>Ничего не найдено. Пожалуйста, попробуйте изменить запрос.</p>
+        <button className={props.allShowed ? "movies-list__more_unactive" : "movies-list__more"} onClick={openMoreMovies} >Ещё</button>
         </Route>
         <Route path="/saved-movies">
-            <ul className="movies-list__element">
-            {props.movies.map(movie => 
+            <ul className="movies-list__element_saved">
+            {props.savedMovies.map(movie => 
                 <MoviesCard 
                 key={movie._id}
                 movie={movie}
-                nameRu={movie.nameRu} 
-                time={movie.time} 
-                image={movie.image}
+                handleCardDelete={props.handleCardDelete}
                 />
             )}
             </ul>
+            <p className={props.isNotFound ? "movies-list__not-found" : "movies-list__not-found_unactive"}>Ничего не найдено. Пожалуйста, попробуйте изменить запрос.</p>
+            <button className={props.allShowed ? "movies-list__more_unactive" : "movies-list__more"} onClick={openMore} >Ещё</button>
         </Route>
-        <button className="movies-list__more" >Ещё</button>
+        </Switch>
         </div>
     )
 }

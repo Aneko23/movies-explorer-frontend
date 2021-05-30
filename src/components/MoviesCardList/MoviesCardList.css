@@ -13,6 +13,14 @@
     padding: 0;
 }
 
+.movies-list__element_saved {
+    display: grid;
+    grid-template-columns: repeat(3, 360px);
+    gap: 30px;
+    margin: 70px auto 28px;
+    padding: 0;
+}
+
 .movies-list__more {
     font-size: 12px;
     line-height: 36px;
@@ -27,8 +35,22 @@
     padding: 0;
 }
 
+.movies-list__more_unactive {
+    display: none;
+}
+
 .movies-list__more:hover {
     background-color: #696969;
+}
+
+.movies-list__not-found_unactive {
+    display: none;
+}
+
+.movies-list__not-found {
+    display: block;
+    margin: auto;
+    color: white;
 }
 
 @media screen and (max-width: 1150px) {

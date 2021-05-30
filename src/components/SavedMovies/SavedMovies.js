@@ -8,10 +8,10 @@ export default function SavedMovies (props) {
 
     return (
         <div className="movies">
-            <SearchForm isClick={props.isClick} clickCheckbox={props.clickCheckbox} />
+            <SearchForm setSavedKeyword={props.setSavedKeyword} setSubmitClicked={props.setSubmitClicked} isSubmitClicked={props.isSubmitClicked} getMovies={props.getMovies} isClickSavedFilter={props.isClickSavedFilter} clickCheckboxSaved={props.clickCheckboxSaved} />
             <Preloader />
             <div className="movies__break-line" />
-            <MoviesCardList savedMovies={props.savedMovies} movies={props.movies} />
+            <MoviesCardList allShowed={props.allShowed} openMoreSavedMovies={props.openMoreSavedMovies} handleCardDelete={props.handleCardDelete} savedMovies={props.savedMovies} movies={props.movies} />
         </div>
     )
 }

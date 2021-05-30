@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import "./Login.css";
 
 const Login = ({ handleLogin }) => {
+
     const [data, setData] = React.useState({
         email: '',
         password: ''
@@ -16,10 +17,13 @@ const Login = ({ handleLogin }) => {
         });
     }
     const handleSubmit = (e) => {
+        const { email, password } = data;
         e.preventDefault();
-          const { password, email } = data;
+        if (!email || !password){
+            return;
+          }
 
-          handleLogin(password, email);
+        handleLogin(email, password);
       }
 
     return (

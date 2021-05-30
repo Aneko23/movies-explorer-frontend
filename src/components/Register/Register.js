@@ -4,6 +4,7 @@ import "./Register.css";
 
 const Register = ({ handleRegister }) => {
     const [data, setData] = React.useState({
+        user: '',
         email: '',
         password: ''
     })
@@ -17,9 +18,9 @@ const Register = ({ handleRegister }) => {
     }
     const handleSubmit = (e) => {
         e.preventDefault();
-          const { password, email } = data;
-
-          handleRegister(password, email);
+          const { password, email, user } = data;
+        console.log('clicked')
+        handleRegister(password, email, user);
       }
 
     return (

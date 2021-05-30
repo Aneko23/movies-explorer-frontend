@@ -18,7 +18,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "deploy": "npm run build && scp -r ./build* n-aneko23@178.154.203.141:/home/n-aneko23/movies-explorer-frontend"
+    "deploy": "npm run build && scp -r ./build* n-aneko23@178.154.207.236:/home/n-aneko23/movies-explorer-frontend"
   },
   "eslintConfig": {
     "extends": [
@@ -37,5 +37,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-image-uploader": "^1.0.0"
   }
 }
