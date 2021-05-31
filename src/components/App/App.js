@@ -171,7 +171,6 @@ function App() {
 
   //Обновление данных пользователя
   function handleUpdateUser(data) {
-    console.log(data)
     api.setUserProfile(data.name, data.email)
     .then(res => {
       setCurrentUser(res);

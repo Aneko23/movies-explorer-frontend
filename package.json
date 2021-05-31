@@ -20,6 +20,7 @@
     "build": "react-scripts build",
     "deploy": "npm run build && scp -r ./build* n-aneko23@178.154.207.236:/home/n-aneko23/movies-explorer-frontend"
   },
+  "homepage": "./",
   "eslintConfig": {
     "extends": [
       "react-app",

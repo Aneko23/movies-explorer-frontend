@@ -19,7 +19,6 @@ const Register = ({ handleRegister }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
           const { password, email, user } = data;
-        console.log('clicked')
         handleRegister(password, email, user);
       }
 
