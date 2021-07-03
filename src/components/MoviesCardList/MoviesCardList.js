@@ -5,9 +5,7 @@ import MoviesCard from '../MoviesCard/MoviesCard';
 
 export default function MoviesCardList (props) {
 
-    function openMore() {
-        props.openMoreSavedMovies();
-    }
+    const isNotFoundShorts = props.savedMovies.length === 0;
 
     function openMoreMovies() {
         props.openMoreMovies();
@@ -24,12 +22,13 @@ export default function MoviesCardList (props) {
                 movie={movie}
                 filterMovies={props.filterMovies}
                 handleAddSavedMovie={props.handleAddSavedMovie}
-                isSaved={props.isSaved}
                 savedMovies={props.savedMovies}
+                handleCardDelete={props.handleCardDelete}
+                movies={props.movies}
                 />
             )}
         </ul>
-        <p className={props.isNotFound ? "movies-list__not-found" : "movies-list__not-found_unactive"}>Ничего не найдено. Пожалуйста, попробуйте изменить запрос.</p>
+        <p className={props.isNotFound ? "movies-list__error" : "movies-list__error_inactive"}>Ничего не найдено. Пожалуйста, попробуйте изменить запрос.</p>
         <button className={props.allShowed ? "movies-list__more_unactive" : "movies-list__more"} onClick={openMoreMovies} >Ещё</button>
         </Route>
         <Route path="/saved-movies">
@@ -38,12 +37,14 @@ export default function MoviesCardList (props) {
                 <MoviesCard 
                 key={movie._id}
                 movie={movie}
+                movies={props.movies}
+                savedMovies={props.savedMovies}
                 handleCardDelete={props.handleCardDelete}
                 />
             )}
             </ul>
-            <p className={props.isNotFound ? "movies-list__not-found" : "movies-list__not-found_unactive"}>Ничего не найдено. Пожалуйста, попробуйте изменить запрос.</p>
-            <button className={props.allShowed ? "movies-list__more_unactive" : "movies-list__more"} onClick={openMore} >Ещё</button>
+            <p className={props.isLoadError ? "movies-list__error" : "movies-list__error_inactive"}>Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз.</p>
+            <p className={isNotFoundShorts ? "movies-list__error" : "movies-list__error_inactive"}>Ничего не найдено. Пожалуйста, попробуйте изменить запрос.</p>
         </Route>
         </Switch>
         </div>

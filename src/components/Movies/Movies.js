@@ -8,10 +8,10 @@ export default function Movies (props) {
 
     return (
         <div className="movies">
-            <SearchForm setKeyword={props.setKeyword} setSubmitClicked={props.setSubmitClicked} isSubmitClicked={props.isSubmitClicked} getMovies={props.getMovies} isClick={props.isClick} clickCheckbox={props.clickCheckbox} />
-            <Preloader />
+            <SearchForm notFindKeyword={props.notFindKeyword} setKeyword={props.setKeyword} setSubmitClicked={props.setSubmitClicked} isSubmitClicked={props.isSubmitClicked} getMovies={props.getMovies} isClick={props.isClick} clickCheckbox={props.clickCheckbox} movies={props.movies} />
+            {props.isFetching && <Preloader isFetching={props.isFetching} />}
             <div className="movies__break-line" />
-            <MoviesCardList allShowed={props.allShowed} openMoreMovies={props.openMoreMovies} isSaved={props.isSaved} handleAddSavedMovie={props.handleAddSavedMovie} isNotFound={props.isNotFound} saveMovie={props.saveMovie} movies={props.movies} savedMovies={props.savedMovies} />
+            <MoviesCardList isLoadError={props.isLoadError} allShowed={props.allShowed} handleCardDelete={props.handleCardDelete} openMoreMovies={props.openMoreMovies} handleAddSavedMovie={props.handleAddSavedMovie} isNotFound={props.isNotFound} saveMovie={props.saveMovie} movies={props.movies} savedMovies={props.savedMovies} />
         </div>
     )
 }

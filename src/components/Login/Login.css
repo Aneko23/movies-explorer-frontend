@@ -41,11 +41,26 @@
 .login__submit {
     margin: 69px auto 16px;
     color: white;
-    background-color: #4285F4;
     border-radius: 3px;
     border: none;
     height: 45px;
     width: 396px;
+}
+
+.login__submit_valid {
+    background-color: #4285F4;
+}
+
+.login__submit_invalid {
+    background-color: #696969;
+    opacity: 0.5;
+}
+
+.login__data-error {
+    margin-bottom: 25px;
+    color: #A52A2A;
+    font-size: 12px;
+    line-height: 12px;
 }
 
 .login__register {

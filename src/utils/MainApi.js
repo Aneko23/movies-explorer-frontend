@@ -86,32 +86,6 @@ class Api {
     .then(this._getResponseData)
   }
 
-  clickLike(id, isLiked) {
-    return fetch(`${this._adress}/cards/${id}/likes`, {
-        method: (isLiked) ? 'DELETE' : 'PUT',
-        headers: {
-            authorization: this._token,
-            'Content-Type': 'application/json',
-          }
-    })
-    .then(this._getResponseData)
-  }
-
-  changeUserAvatar(avatar) {
-    return fetch(`${this._adress}/users/me/avatar`, {
-        method: 'PATCH',
-        headers: {
-            authorization: this._token,
-            'Content-Type': 'application/json',
-          },
-        body: JSON.stringify({
-            avatar
-    })
-    })
-        .then(this._getResponseData)
-    }
-
-
 }
 
 const token = localStorage.getItem('jwt');

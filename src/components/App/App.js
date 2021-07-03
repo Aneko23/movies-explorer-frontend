@@ -36,10 +36,15 @@ function App() {
   const [allShowed, setAllShowed] = React.useState(true);
   const [keyword, setKeyword] = React.useState('');
   const [savedKeyword, setSavedKeyword] = React.useState('');
-  const [isSaved, setSavedMovie] = React.useState(false);
-  const [endBig, setEndBig] = React.useState(9);
-  const [endMiddle, setEndMiddle] = React.useState(6);
+  const [endBig, setEndBig] = React.useState(12);
+  const [endMiddle, setEndMiddle] = React.useState(8);
   const [endSmall, setEndSmall] = React.useState(5);
+  const [fullSavedFilterMovies, setFullSavedFilterMovies] = React.useState([]);
+  const [fullFilterMovie, setFullFilterMovie] = React.useState([]);
+  const [notFindKeyword, setMissingKeyword] = React.useState(false);
+  const [isLoadError, setIsLoadError] = React.useState(true);
+  const [loginError, setLoginError] = React.useState(false);
+  const [isUpdateProfile, setUpdateProfile] = React.useState(false);
 
   const history = useHistory();
   const location = useLocation();
@@ -51,9 +56,12 @@ function App() {
       .then((data) => {
         localStorage.setItem('jwt', data.token);
         setLoggedIn(true);
+        setCurrentUser(data.user);
         history.push("/movies");
       })
       .catch((error) => {
+        setOpenInfoTool(true);
+        setLoginError(true);
         console.log(error);
       }); 
   }
@@ -64,21 +72,28 @@ function App() {
     .then(() => {
       setOpenInfoTool(true);
       setResultSuccess(true);
-      handleLogin(email, password);
   })
+    .then(() => {
+      handleLogin(email, password);
+      setCurrentUser({
+        email: email,
+        name: user
+      })
+    })
     .catch((error) => {
       console.log(error);
-      setPopupOpen(true);
+      setOpenInfoTool(true);
 }); 
   }
 
   // Клик по чекбоксу
   function clickCheckbox() {
     setFilterMovies(!isClick);
-    if (movies.length > 0) {
-      const shortMovies = movies.filter((movie) => movie.duration <= 40)
+    if (fullFilterMovie.length > 0) {
+      const shortMovies = fullFilterMovie.filter((movie) => movie.duration <= 40);
+      setMovies(shortMovies);
+      setAllShowed(true);
       if (shortMovies.length === 0) {
-        setMovies(shortMovies);
         setNotFound(true);
       }
     } else {
@@ -93,13 +108,40 @@ function App() {
     }
   }
 
+  React.useEffect(() => {
+    if (!isClick) {
+      if (1152 <= width) {
+        setMovies(fullFilterMovie.slice(0, endBig));
+        if (fullFilterMovie.length > endBig) {
+          setAllShowed(false);
+        } else {
+          setAllShowed(true);
+        }
+      } else if (768 <= width && width <= 1151) {
+        setMovies(fullFilterMovie.slice(0, endMiddle));
+        if (fullFilterMovie.length > endMiddle) {
+          setAllShowed(false);
+        } else {
+          setAllShowed(true);
+        }
+      } else if (320 <= width && width <= 767) {
+        setMovies(fullFilterMovie.slice(0, endSmall));
+        if (fullFilterMovie.length > endSmall) {
+          setAllShowed(false);
+        } else {
+          setAllShowed(true);
+        }
+      }
+    }
+  }, [isClick])
+
   // Клик по чекбоксу на странице сохранённых фильмов
   function clickCheckboxSaved() {
     setFilterSavedMovies(!isClickSavedFilter);
     if (savedMovies.length > 0) {
-      const shortMovies = savedMovies.filter((movie) => movie.duration <= 40)
+      const shortMovies = savedMovies.filter((movie) => movie.duration <= 40);
       if (shortMovies.length === 0) {
-        addSavedMovies(shortMovies);
+        addSavedMovies([]);
         setNotFound(true);
       } else {
         addSavedMovies(shortMovies);
@@ -107,10 +149,17 @@ function App() {
     }
   }
 
+  React.useEffect(() => {
+    if (!isClickSavedFilter) {
+      addSavedMovies(fullSavedFilterMovies);
+    }
+  }, [isClickSavedFilter])
+
   // Выход из приложения
   function handleLogOut() {
     localStorage.removeItem('jwt');
     setLoggedIn(false);
+    setCurrentUser([]);
     history.push('/');
   }
 
@@ -123,7 +172,11 @@ function App() {
         if (res){
           setCurrentUser(res);
           setLoggedIn(true);
-          history.push(location.pathname);
+          if (location.pathname === '/') {
+            history.push('/movies');
+          } else {
+            history.push(location.pathname);
+          }
         }
       })
       .catch((error) => {
@@ -138,9 +191,16 @@ function App() {
   // Проверка токена при каждом обновлении
   React.useEffect(() => {
     tokenCheck();
-  }, [history]);
+  }, []);
 
-  //Проверка данных пользователя с сервера
+  // Перевожу на страницу, если пользователь зарегистрирован
+  React.useEffect(() => {
+    if (loggedIn) {
+      history.push('/movies');
+    }
+  }, [loggedIn])
+
+  // Проверка данных пользователя с сервера
   React.useEffect(() => {
     if (loggedIn) {
       api.getUserProfile()
@@ -150,6 +210,8 @@ function App() {
       .catch((error) => {
           console.log(`Возникла ошибка: ${error}`)
       })
+    } else {
+      history.push('/');
     }
   }, []);
 
@@ -161,6 +223,10 @@ function App() {
       setPopupOpen(false);
     }
   }, [isClose])
+
+  function closeInfoTool() {
+    setOpenInfoTool(false);
+  }
 
   //Функция для открытия попапа для редактирования профиля
   function handleEditProfileClick() {
@@ -175,11 +241,14 @@ function App() {
     .then(res => {
       setCurrentUser(res);
       closeAllPopups(true);
+      setOpenInfoTool(true);
+      setUpdateProfile(true);
     })
     .catch((err) => {
+      setOpenInfoTool(true);
         console.log(`Возникла ошибка: ${err}`)
     });
-  }
+      }
 
   // Поиск и фильтрация фильмов
   React.useEffect(() => {
@@ -187,49 +256,59 @@ function App() {
         moviesApi.getMovies()
         .then((data) => {
           const newCardMovie = data.filter(movie => movie.nameRU.includes(keyword));
+          setFullFilterMovie(newCardMovie);
           if (newCardMovie.length === 0) {
             setNotFound(true);
             setMovies([]);
           } else {
             setNotFound(false);
-            setAllShowed(false);
-            if (768 < width < 1280) {
-              setMovies(newCardMovie.slice(0 , endBig));
-            } else if (480 < width < 768) {
-              setMovies(newCardMovie.slice(0 , endMiddle));
-            } else if (320 < width < 420) {
-              setMovies(newCardMovie.slice(0 , endSmall));
-            }
-            if (movies.length < 5) {
-              setAllShowed(true);
+            if (1152 <= width ) {
+              if (newCardMovie.length <= endBig) {
+                setMovies(newCardMovie);
+                setAllShowed(true);
+              } else {
+                setMovies(newCardMovie.slice(0 , endBig));
+                setAllShowed(false);
+              }
+            } else if (480 <= width && width < 1151) {
+              if (newCardMovie.length <= endMiddle) {
+                setMovies(newCardMovie);
+                setAllShowed(true);
+              } else {
+                setMovies(newCardMovie.slice(0 , endMiddle));
+                setAllShowed(false);
+              }
+            } else if (320 <= width && width < 420) {
+              if (newCardMovie.length <= endSmall) {
+                setMovies(newCardMovie);
+                setAllShowed(true);
+              } else {
+                setMovies(newCardMovie.slice(0 , endSmall));
+                setAllShowed(false);
+              }
             }
           }
         })
+        .catch(() => {
+          setIsLoadError(true);
+        })
       } else {
         setMovies([]);
+        setMissingKeyword(true);
       }
   }, [keyword])
 
-    // Поиск и фильтрация  сохранённых фильмов
+    // Поиск и фильтрация сохранённых фильмов
     React.useEffect(() => {
       if (!(savedKeyword === '')) {
-        const filterMovies = savedMovies.filter(movie => movie.nameRU.includes(savedKeyword))
+        const filterMovies = savedMovies.filter(movie => movie.nameRU.includes(savedKeyword));
+        setFullSavedFilterMovies(filterMovies);
         if (filterMovies.length === 0) {
           setNotFound(true);
           addSavedMovies([]);
         } else {
           setNotFound(false);
-          setAllShowed(false);
-          if (768 < width < 1280) {
-            addSavedMovies(filterMovies.slice(0 , endBig));
-          } else if (480 < width < 768) {
-            addSavedMovies(filterMovies.slice(0 , endMiddle));
-          } else if (320 < width < 420) {
-            addSavedMovies(filterMovies.slice(0 , endSmall));
-          }
-          if (savedMovies.length < 5) {
-            setAllShowed(true);
-          }
+          addSavedMovies(filterMovies);
         }
     } else {
       addSavedMovies([]);
@@ -240,22 +319,51 @@ function App() {
   function openMoreMovies() {
     const stepBig = 3;
     const stepMiddle = 2;
-    const stepSmall = 1;
-    if (768 < width) {
-      setMovies(movies.slice(0 , setEndBig(endBig + stepBig)));
-    } else if (480 < width < 768) {
-      setMovies(movies.slice(0 , setEndMiddle(endMiddle + stepMiddle)));
-    } else if (320 < width < 420) {
-      setMovies(movies.slice(0 , setEndSmall(endSmall + stepSmall)));
-    }
-    if (movies.length < (endBig + stepBig)) {
-      setAllShowed(true);
+    const stepSmall = 2;
+    if (1152 <= width) {
+      const step = endBig + stepBig;
+      setEndBig(step);
+    } else if (768 <= width && width <= 1151) {
+      const step = endMiddle + stepMiddle;
+      setEndMiddle(step);
+    } else if (320 <= width && width <= 767) {
+      const step = endSmall + stepSmall;
+      setEndSmall(step);
     }
   }
 
+  // Проверка при каждом нажатии на кнопку "Ещё" на маленьких экранах и отображение фильмов
+  React.useEffect(() => {
+    setMovies(fullFilterMovie.slice(0 , endSmall));
+    if (endSmall >= fullFilterMovie.length) {
+      setAllShowed(true)
+    }
+  }, [endSmall])
+
+  // Проверка при каждом нажатии на кнопку "Ещё" на средних экранах и отображение фильмов
+  React.useEffect(() => {
+    setMovies(fullFilterMovie.slice(0 , endMiddle));
+    if (endMiddle >= fullFilterMovie.length) {
+      setAllShowed(true)
+    }
+  }, [endMiddle])
+
+  // Проверка при каждом нажатии на кнопку "Ещё" на больших экранах и отображение фильмов
+  React.useEffect(() => {
+    setMovies(fullFilterMovie.slice(0 , endBig));
+    if (endBig >= fullFilterMovie.length) {
+      setAllShowed(true)
+    }
+  }, [endBig])
+
   //Функция для клика по кнопке "Сохранить"
   function handleAddSavedMovie (movie) {
-    const country = movie.country;
+    let country = '';
+    if (movie.country) {
+      country = movie.country;
+    } else {
+      country = "Страна не указана";
+    }
     const director = movie.director;
     const duration = movie.duration;
     const year = movie.year;
@@ -263,77 +371,63 @@ function App() {
     const image = 'https://api.nomoreparties.co'.concat(movie.image.url);
     const trailer = movie.trailerLink;
     const nameRU = movie.nameRU;
-    const nameEN = movie.nameEN;
+    let nameEN = "";
+    if (movie.nameEN) {
+      nameEN = movie.nameEN;
+    } else {
+      nameEN = "Английский вариант названия не указан";
+    }
     let thumbnail = '';
     const movieId = movie.id;
-    if(movie.image) {
+    if (movie.image) {
       thumbnail = 'https://api.nomoreparties.co'.concat(movie.image.formats.thumbnail.url);
     } else {
       thumbnail = NotFound;
     }
-    
+
     api.addMovie({country, director, duration, year, description, image, trailer, nameRU, nameEN, thumbnail, movieId})
     .then((newMovie) => {
       addSavedMovies([newMovie, ...savedMovies]);
-      setSavedMovie(true);
     })
     .catch((error) => {
       console.log(`Возникла ошибка: ${error}`)
   })
   }
 
-  //Получаю гелерею с сохранёнными карточками
+  //Получаю гелерею с сохранёнными фильмами
   React.useEffect(() => {
     api.getMovies()
     .then(res => {
-      if (768 < width < 1280) {
-        addSavedMovies(res.slice(0 , endBig));
-      } else if (480 < width < 768) {
-        addSavedMovies(res.slice(0 , endMiddle));
-      } else if (320 < width < 420) {
-        addSavedMovies(res.slice(0 , endSmall));
-      }
+      setFullSavedFilterMovies(res);
+      addSavedMovies(res);
     })
     .catch((error) => {
         console.log(`Возникла ошибка: ${error}`)
     })
 }, []);
 
-  //Функция удаления карточки
+  //Функция удаления карточки фильма из сохранённых
   function handleCardDelete(movie) {
-    api.deleteMovie(movie._id)
-      .then(() => {
-          //Обновляю список карточек
-          api.getMovies()
-          .then(res => {
-            addSavedMovies(res)
-          })
-          .catch((error) => {
-            console.log(`Возникла ошибка: ${error}`)
-          })
-      })
-      .catch((error) => {
-        console.log(`Возникла ошибка: ${error}`)
-    });
-  }
-
-  //Открытие карточек с сохранёнными фильмами после нажатия на кнопку "Ещё"
-  function openMoreSavedMovies() {
     api.getMovies()
-    .then((res) => {
-      const stepBig = 3;
-      const stepMiddle = 2;
-      const stepSmall = 1;
-      if (768 < width) {
-        addSavedMovies(res.slice(0 , setEndBig(endBig + stepBig)));
-      } else if (480 < width < 768) {
-        addSavedMovies(res.slice(0 , setEndMiddle(endMiddle + stepMiddle)));
-      } else if (320 < width < 420) {
-        addSavedMovies(res.slice(0 , setEndSmall(endSmall + stepSmall)));
-      }
-      if (savedMovies.length < (endBig + stepBig)) {
-        setAllShowed(true);
-      }
+    .then((savedM) => {
+      savedM.map((s) => {
+        if (s.nameRU === movie.nameRU) {
+          api.deleteMovie(s._id)
+        .then(() => {
+            //Обновляю список карточек
+            api.getMovies()
+            .then(res => {
+              addSavedMovies(res);
+            })
+            .catch((error) => {
+              console.log(`Возникла ошибка: ${error}`)
+            })
+        })
+        .catch((error) => {
+          console.log(`Возникла ошибка: ${error}`)
+        });
+        }
+      })
     })
   }
 
@@ -348,20 +442,21 @@ function App() {
               </Route>
               <Route path="/signup">
                 <Register handleRegister={handleRegister} />
-                <InfoTooltip isOpenInfoTool={isOpenInfoTool} isClose={isClose} onClosePopup={closeAllPopups} resultSuccess={resultSuccess} />
+                <InfoTooltip closeInfoTool={closeInfoTool} isOpenInfoTool={isOpenInfoTool} isClose={isClose} onClosePopup={closeAllPopups} resultSuccess={resultSuccess} isClick={isClick} />
               </Route>
               <Route path="/signin">
                 <Login handleLogin={handleLogin} />
+                <InfoTooltip closeInfoTool={closeInfoTool} isOpenInfoTool={isOpenInfoTool} isClose={isClose} onClosePopup={closeAllPopups} resultSuccess={resultSuccess} loginError={loginError} isClick={isClick} />
               </Route>
-              <ProtectedRoute path="/movies" isSaved={isSaved} handleAddSavedMovie={handleAddSavedMovie} openMoreMovies={openMoreMovies} setKeyword={setKeyword} isNotFound={isNotFound} movies={movies} savedMovies={savedMovies} isClick={isClick} clickCheckbox={clickCheckbox} loggedIn={loggedIn} setSubmitClicked={setSubmitClicked} isSubmitClicked={isSubmitClicked} allShowed={allShowed} component={Movies} />
-              <ProtectedRoute path="/saved-movies" setSavedKeyword={setSavedKeyword} loggedIn={loggedIn} component={SavedMovies} openMoreSavedMovies={openMoreSavedMovies} handleCardDelete={handleCardDelete} savedMovies={savedMovies} movies={movies} isClickSavedFilter={isClickSavedFilter} clickCheckboxSaved={clickCheckboxSaved} allShowed={allShowed} />
-              <ProtectedRoute path="/profile" loggedIn={loggedIn} component={Profile} closeAllPopups={closeAllPopups} handleUpdateUser={handleUpdateUser} handleLogOut={handleLogOut} handleEditProfileClick={handleEditProfileClick} isEditProfilePopupOpen={isEditProfilePopupOpen} isClose={isClose} isOpen={isOpen} />
+              <ProtectedRoute path="/movies" isLoadError={isLoadError} notFindKeyword={notFindKeyword} handleAddSavedMovie={handleAddSavedMovie} openMoreMovies={openMoreMovies} setKeyword={setKeyword} isNotFound={isNotFound} movies={movies} savedMovies={savedMovies} isClick={isClick} clickCheckbox={clickCheckbox} loggedIn={loggedIn} setSubmitClicked={setSubmitClicked} isSubmitClicked={isSubmitClicked} allShowed={allShowed} handleCardDelete={handleCardDelete} component={Movies} />
+              <ProtectedRoute path="/saved-movies" notFindKeyword={notFindKeyword} setSavedKeyword={setSavedKeyword} loggedIn={loggedIn} component={SavedMovies} handleCardDelete={handleCardDelete} savedMovies={savedMovies} movies={movies} isClickSavedFilter={isClickSavedFilter} clickCheckboxSaved={clickCheckboxSaved} allShowed={allShowed} />
+              <ProtectedRoute path="/profile" isUpdateProfile={isUpdateProfile} closeInfoTool={closeInfoTool} isOpenInfoTool={isOpenInfoTool} resultSuccess={resultSuccess} loggedIn={loggedIn} component={Profile} closeAllPopups={closeAllPopups} handleUpdateUser={handleUpdateUser} handleLogOut={handleLogOut} handleEditProfileClick={handleEditProfileClick} isEditProfilePopupOpen={isEditProfilePopupOpen} isClose={isClose} isOpen={isOpen} />
               <Route>
-              {loggedIn ? <Redirect to={location} /> : <Redirect to="/" />}
               </Route> 
               <Route path="*">
                 <NotFoundPage />
               </Route>
+              {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/" />}
             </Switch>
             <Footer />
           </div>

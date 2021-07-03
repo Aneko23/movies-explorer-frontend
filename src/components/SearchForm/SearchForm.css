@@ -21,6 +21,10 @@
     color: white;
 }
 
+.search-form__input_error {
+    border: solid 1px #A52A2A;
+}
+
 .search-form__input:focus {
     border: solid 1px #4285F4;
     outline: none;
@@ -87,6 +91,19 @@
 
 .search__circle_inactive {
     transform: translateX(0%);
+}
+
+.search-form__input-error {
+    margin-bottom: 25px;
+    color: #A52A2A;
+    font-size: 12px;
+    line-height: 12px;
+}
+
+.search-form__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 @media screen and (max-width: 1150px) {
