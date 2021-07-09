@@ -1,0 +1,31 @@
+.not-found {
+    background-color: #202020;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.not-found__title {
+    width: 400px;
+    margin: 246px auto 184px;
+    font-size: 16px;
+    text-align: center;
+}
+
+span {
+    font-size: 140px;
+    line-height: 169px;
+    flex-wrap: wrap;
+}
+
+.not-found__button-back {
+    color: #4285F4;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 0 auto 60px;
+}
+
+.not-found__button-back:hover {
+    color: white;
+}

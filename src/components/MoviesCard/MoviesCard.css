@@ -1,0 +1,134 @@
+.movies-card__button {
+    display: block;
+}
+
+.movies-card__button_inactive {
+    display: none;
+}
+
+.movies-card__save {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    padding: 0;
+    width: 72px;
+    height: 21px;
+    font-size: 10px;
+    line-height: 21px;
+    text-align: center;
+    border-radius: 30px;
+    background-color: #313131;
+    border: none;
+    color: white;
+    cursor: pointer;
+}
+
+.movies-card__save_inactive {
+    display: none;
+}
+
+.movies-card__save:hover {
+    transform: scale(1.1, 1.1);
+}
+
+.movies-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.movies-card__info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: 20px;
+    gap: 30px;
+    margin: 14px 0 29px;
+}
+
+.movies-card__name {
+    font-size: 13px;
+    font-weight: 500;
+    width: 250px;
+    text-align: start;
+    color: white;
+    margin: 0;
+}
+
+.movies-card__time {
+    font-size: 11px;
+    font-weight: 400;
+    color: #8B8B8B;
+    background-color: #2F2F2F;
+    border-radius: 3px;
+    line-height: 18px;
+    width: 52px;
+    text-align: center;
+    margin: 0;
+}
+
+.movies-card__image {
+    width: 360px;
+    height: 201px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+
+.movies-card__saved {
+    width: 21px;
+    height: 21px;
+    position: absolute;
+    top: 14px;
+    right: 14px;
+}
+
+.delete-movie {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 21px;
+    height: 21px;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.delete-movie:hover {
+    transform: scale(1.1, 1.1);
+}
+
+.movies-card__unsaved {
+    display: none;
+}
+
+.movies-card__button_inactive {
+    display: none;
+}
+
+.delete-movie_inactive {
+    display: none;
+}
+
+@media screen and (max-width: 1150px) {
+    .movies-card__info {
+        margin: 25px 0 17px;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .movies-card__image {
+        width: 300px;
+        height: 168px;
+    }
+
+    .movies-card__name {
+        width: 240px;
+    }
+
+    .movies-card__info {
+        gap: 8px;
+        margin: 14px 0 0px;
+    }
+}

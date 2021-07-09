@@ -1,0 +1,55 @@
+.promo {
+    position: relative;
+    background-color: #073042;
+    width: 100%;
+}
+
+.promo-title {
+    color: white;
+    width: 730px;
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 58px;
+    letter-spacing: -4%;
+    margin: auto;
+    padding-top: 184px;
+    padding-bottom: 224px;
+    text-align: center;
+}
+
+.promo-logo {
+    position: absolute;
+    top: 82px;
+    right: 480px;
+    width: 320px;
+    height: 320px;
+}
+
+@media screen and (max-width: 1150px) {
+    .promo-logo {
+        top: 224px;
+        right: 224px;
+    }
+
+    .promo-title {
+        padding-top: 326px;
+        padding-bottom: 342px;
+    }
+}
+
+@media  screen and (max-width: 767px) {
+    .promo-logo {
+        width: 248px;
+        height: 248px;
+        top: 142px;
+        right: 36px;
+    }
+
+    .promo-title {
+        width: 300px;
+        font-size: 31px;
+        line-height: 39px;
+        padding-top: 207px;
+        padding-bottom: 246px;
+    }
+}
