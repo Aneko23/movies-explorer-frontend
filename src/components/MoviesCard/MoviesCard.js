@@ -33,7 +33,6 @@ export default function MoviesCard (props) {
     const isLiked = props.savedMovies.some((s) => {
         return s.nameRU === props.movie.nameRU;
     })
-    console.log(isLiked)
 
     return (
         <>

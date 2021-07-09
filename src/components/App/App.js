@@ -158,6 +158,9 @@ function App() {
   // Выход из приложения
   function handleLogOut() {
     localStorage.removeItem('jwt');
+    localStorage.setItem('lastKeyword', '');
+    setKeyword('');
+    setMovies([]);
     setLoggedIn(false);
     setCurrentUser([]);
     history.push('/');
@@ -166,25 +169,21 @@ function App() {
   // Функция для проверки токена
   function tokenCheck() {
     const jwt = `${localStorage.getItem('jwt')}`;
-    if (jwt) {
+    if (jwt !== 'null' && jwt !== 'undefind') {
       auth.getContent(jwt)
       .then((res) => {
         if (res){
           setCurrentUser(res);
           setLoggedIn(true);
-          if (location.pathname === '/') {
-            history.push('/movies');
-          } else {
-            history.push(location.pathname);
-          }
         }
       })
       .catch((error) => {
           console.log(error);
     });
     } else {
-        setLoggedIn(false);
-        console.log('Авторизуйся')
+      setLoggedIn(false);
+      history.push('/');
+      console.log('Авторизуйтесь')
     }
   }
 
@@ -195,8 +194,8 @@ function App() {
 
   // Перевожу на страницу, если пользователь зарегистрирован
   React.useEffect(() => {
-    if (loggedIn) {
-      history.push('/movies');
+    if (loggedIn === true && location.pathname === '/') {
+      history.push('/movies')
     }
   }, [loggedIn])
 
@@ -224,6 +223,7 @@ function App() {
     }
   }, [isClose])
 
+  //Функция для закрытия попапа
   function closeInfoTool() {
     setOpenInfoTool(false);
   }
@@ -253,6 +253,7 @@ function App() {
   // Поиск и фильтрация фильмов
   React.useEffect(() => {
       if (!(keyword === '')) {
+        localStorage.setItem('lastKeyword', keyword);
         moviesApi.getMovies()
         .then((data) => {
           const newCardMovie = data.filter(movie => movie.nameRU.includes(keyword));
@@ -394,6 +395,12 @@ function App() {
   })
   }
 
+  //Получаю гелерею с отфильтрованными фильмами
+  React.useEffect(() => {
+    const lastKeyword = `${localStorage.getItem('lastKeyword')}`
+    setKeyword(lastKeyword);
+}, []);
+
   //Получаю гелерею с сохранёнными фильмами
   React.useEffect(() => {
     api.getMovies()
@@ -431,13 +438,28 @@ function App() {
     })
   }
 
+  React.useEffect(() => {
+    const jwt = `${localStorage.getItem('jwt')}`;
+    if (jwt !== 'null' && jwt !== 'undefind') {
+      if (location.pathname === '/saved-movies') {
+        history.push('/saved-movies')
+    } else if (location.pathname === '/profile') {
+      history.push('/profile')
+    } else if (location.pathname === '/movies') {
+      history.push('/movies')
+    }
+    } else {
+      history.push('/')
+    }
+  }, [])
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
         <div className="root">
           <div className="page">
-            <Header />
+            <Header loggedIn={loggedIn} />
             <Switch>
-              <Route exact path="/" >
+              <Route exact path="/" loggedIn={loggedIn}>
                 <Main />
               </Route>
               <Route path="/signup">
@@ -445,10 +467,10 @@ function App() {
                 <InfoTooltip closeInfoTool={closeInfoTool} isOpenInfoTool={isOpenInfoTool} isClose={isClose} onClosePopup={closeAllPopups} resultSuccess={resultSuccess} isClick={isClick} />
               </Route>
               <Route path="/signin">
-                <Login handleLogin={handleLogin} />
+                <Login loginError={loginError} handleLogin={handleLogin} />
                 <InfoTooltip closeInfoTool={closeInfoTool} isOpenInfoTool={isOpenInfoTool} isClose={isClose} onClosePopup={closeAllPopups} resultSuccess={resultSuccess} loginError={loginError} isClick={isClick} />
               </Route>
-              <ProtectedRoute path="/movies" isLoadError={isLoadError} notFindKeyword={notFindKeyword} handleAddSavedMovie={handleAddSavedMovie} openMoreMovies={openMoreMovies} setKeyword={setKeyword} isNotFound={isNotFound} movies={movies} savedMovies={savedMovies} isClick={isClick} clickCheckbox={clickCheckbox} loggedIn={loggedIn} setSubmitClicked={setSubmitClicked} isSubmitClicked={isSubmitClicked} allShowed={allShowed} handleCardDelete={handleCardDelete} component={Movies} />
+              <ProtectedRoute path="/movies" keyword={keyword} isLoadError={isLoadError} notFindKeyword={notFindKeyword} handleAddSavedMovie={handleAddSavedMovie} openMoreMovies={openMoreMovies} setKeyword={setKeyword} isNotFound={isNotFound} movies={movies} savedMovies={savedMovies} isClick={isClick} clickCheckbox={clickCheckbox} loggedIn={loggedIn} setSubmitClicked={setSubmitClicked} isSubmitClicked={isSubmitClicked} allShowed={allShowed} handleCardDelete={handleCardDelete} component={Movies} />
               <ProtectedRoute path="/saved-movies" notFindKeyword={notFindKeyword} setSavedKeyword={setSavedKeyword} loggedIn={loggedIn} component={SavedMovies} handleCardDelete={handleCardDelete} savedMovies={savedMovies} movies={movies} isClickSavedFilter={isClickSavedFilter} clickCheckboxSaved={clickCheckboxSaved} allShowed={allShowed} />
               <ProtectedRoute path="/profile" isUpdateProfile={isUpdateProfile} closeInfoTool={closeInfoTool} isOpenInfoTool={isOpenInfoTool} resultSuccess={resultSuccess} loggedIn={loggedIn} component={Profile} closeAllPopups={closeAllPopups} handleUpdateUser={handleUpdateUser} handleLogOut={handleLogOut} handleEditProfileClick={handleEditProfileClick} isEditProfilePopupOpen={isEditProfilePopupOpen} isClose={isClose} isOpen={isOpen} />
               <Route>
@@ -456,7 +478,9 @@ function App() {
               <Route path="*">
                 <NotFoundPage />
               </Route>
-              {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/" />}
+              <Route>
+                {loggedIn ? <Redirect to="/movies" /> : <Redirect to="/" />}
+              </Route>
             </Switch>
             <Footer />
           </div>

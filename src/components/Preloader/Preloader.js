@@ -3,7 +3,7 @@ import './Preloader.css'
 
 const Preloader = (props) => {
     return (
-        <div className={props.isFetching ? "preloader_active" : "preloader"}>
+        <div className={props.isFetching && (!props.loginError) ? "preloader_active" : "preloader"}>
             <div className="preloader__container">
                 <span className="preloader__round"></span>
             </div>

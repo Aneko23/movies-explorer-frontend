@@ -77,7 +77,7 @@ const Login = (props) => {
                 <p className="login__data-name">Пароль</p>
                 <input onBlur={e => blurHandler(e)} className="login__data" id="form-job" name="password" required type="password" value={password} onChange={e => passwordHandler(e)} />
                 {(passwordError && isClickedPassword) && <span className="login__data-error">{passwordError}</span>}
-                {isFetching ? <Preloader isFetching={isFetching} /> : <button disabled={!formValid} type="submit" className={`login__submit ${formValid ? "login__submit_valid" : "login__submit_invalid"}`}>Войти</button>}
+                {isFetching ? <Preloader loginError={props.loginError} isFetching={isFetching} /> : <button disabled={!formValid} type="submit" className={`login__submit ${formValid ? "login__submit_valid" : "login__submit_invalid"}`}>Войти</button>}
             </form>
             <div className="login__register">
             <p className="login__register-title">Ещё не зарегистрированы?</p>

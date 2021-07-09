@@ -17,6 +17,7 @@ export default function Header (props) {
     return(
                 <Switch>
                     <Route exact path="/">
+                        {(!props.loggedIn) ?
                         <header className="header">
                             <Link to="/" >
                                 <img className="header__logo" src={Logo} alt="Логотип сайта" />
@@ -25,7 +26,38 @@ export default function Header (props) {
                                 <Link to="/signup" className="register-button">Регистрация</Link>
                                 <Link to="/signin" className="login-button">Войти</Link>
                             </div>
-                        </header>
+                        </header> :
+                        <header className="header">
+                        <div className={isClick ? "overlay_active" : "overlay"}></div>
+                        <Link to="/" >
+                            <img className="header-movies__logo" src={Logo} alt="Логотип сайта" />
+                        </Link>
+                        <div className="header__burger-menu" onClick={handleClick} >
+                            <div className={`burger-line ${isClick && "burger-line__top"}`}></div>
+                            <div className={`burger-line ${isClick && "burger-line__middle"}`}></div>
+                            <div className={`burger-line ${isClick && "burger-line__bottom"}`}></div>
+                        </div>
+                        <nav className={`header__menu ${isClick && "header__menu_active"}`}>
+                            <div className="header__menu-items">
+                                <NavLink exact to="/" className="header__menu-link" onClick={handleClickLink} activeClassName="header-link_active">Главная</NavLink>
+                                <NavLink to="/movies" className="header__menu-link" onClick={handleClickLink} activeClassName="header-link_active">Фильмы</NavLink>
+                                <NavLink to="/saved-movies" className="header__menu-link" onClick={handleClickLink} activeClassName="header-link_active">Сохранённые фильмы</NavLink>
+                            </div>
+                            <NavLink to="/profile" className="header__menu-profile" onClick={handleClickLink} activeClassName="header-link_active">Аккаунт
+                                <div className="header-movies__profile-icon" />
+                            </NavLink>
+                        </nav>
+                        <nav className="header-movies__container">
+                            <div className="header-movies__links">
+                                <NavLink to="/movies" className="header-link" activeClassName="header-link_active">Фильмы</NavLink>
+                                <NavLink to="/saved-movies" className="header-link" activeClassName="header-link_active">Сохранённые фильмы</NavLink>
+                            </div>
+                            <NavLink to="/profile" className="header-movies__profile" activeClassName="header-link_active">Аккаунт
+                                <div className="header-movies__profile-icon" />
+                            </NavLink>
+                        </nav>
+                    </header>
+                        }
                     </Route>
 
                     <Route path="/signup">

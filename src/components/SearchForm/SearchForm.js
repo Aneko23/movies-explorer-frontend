@@ -8,6 +8,7 @@ export default function SearchForm (props) {
     const [keyword, setKeyword] = React.useState('');
     const [isClickedKeyword, setIsClickedKeyword] = React.useState(false);
     const [keywordError, setKeywordError] = React.useState("");
+    const [isClick, setClicked] = React.useState(false);
 
     const keywordChange = (e) => {
         setKeyword(e.target.value);
@@ -16,6 +17,10 @@ export default function SearchForm (props) {
         } else {
             setKeywordError("")
         }
+    }
+
+    function clickInput() {
+        setClicked(true)
     }
 
     const blurHandler = (e) => {
@@ -48,7 +53,7 @@ export default function SearchForm (props) {
 
     function handleFindSavedMovies(e) {
         e.preventDefault();
-        props.setSavedKeyword(keyword);
+        props.setSavedKeyword(props.keyword);
     }
 
     return (
@@ -56,7 +61,7 @@ export default function SearchForm (props) {
             <Route path="/movies">
             <div className="search-form__container">
             <form className="search-form" onSubmit={handleSubmit}>
-                <input onBlur={e => blurHandler(e)} className={`search-form__input ${keywordError ? "search-form__input_error" : "search-form__input_basic"}`} id="form-keyword" name="keyword" value={keyword} onChange={e => keywordChange(e)} required type="text" placeholder="Фильм"></input>
+                <input onBlur={e => blurHandler(e)} className={`search-form__input ${keywordError ? "search-form__input_error" : "search-form__input_basic"}`} id="form-keyword" name="keyword" onClick={clickInput} value={isClick ? keyword : props.keyword} onChange={e => keywordChange(e)} required type="text" placeholder="Фильм"></input>
                 <button className="search-form__button" type="submit" />
             </form>
             {(isClickedKeyword && keywordError) && <span className="search-form__input-error" id="form-error">{keywordError}</span>}
